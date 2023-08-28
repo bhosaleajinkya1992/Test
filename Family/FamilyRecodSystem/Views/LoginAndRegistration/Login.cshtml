@@ -1,0 +1,127 @@
+﻿
+@{
+    Layout = null;
+}
+
+<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title> Login Page </title>
+    <style>
+        Body {
+            font-family: Calibri, Helvetica, sans-serif;
+            /*background-color: pink;*/
+        }
+
+        button {
+            /*background-color: #4CAF50;*/
+            width: 100%;
+            /*color: orange;
+            padding: 15px;*/
+            margin: 10px 0px;
+            /* border: none;
+            cursor: pointer;*/
+        }
+
+        /*form {
+            border: 3px solid #f1f1f1;
+        }*/
+
+        input[type=text], input[type=password] {
+            width: 100%;
+            margin: 8px 0;
+            padding: 12px 20px;
+            display: inline-block;
+            /* border: 2px solid green;*/
+            box-sizing: border-box;
+        }
+
+        button:hover {
+            opacity: 0.7;
+        }
+
+        .container {
+            padding: 25px;
+            /*background-color: lightblue;*/
+        }
+
+        fieldset {
+            width: 25%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Log On </h1>
+        <p>Please enter your username and password.<a href="/LoginAndRegistration/Registration">Register</a> if you don't have an account</p>
+        @*<form>*@
+        <fieldset>
+            <legend>Account Information</legend>
+            <label>Username : </label>
+            <input type="text" placeholder="Enter Username" id="username" value="ajinkya">
+            <label style="color:red;" id="errorlblUsername"></label>
+
+            <label>Password : </label>
+            <input type="password" placeholder="Enter Password" id="userpwd" autocomplete="off" value="123456">
+            <label style="color:red;" id="errorlbluserPwd"></label>
+            <button class="btn btn-primary" onclick="CheckLogin()">Login</button>
+            <input type="checkbox" checked="checked" id="chkRememberMe"> Remember me
+        </fieldset>
+        @*</form>*@
+    </div>
+</body>
+</html>
+
+
+<script>
+
+    function CheckLogin()
+    {
+        debugger
+        var userName=$('#username').val();
+        var userPassword = $('#userpwd').val();
+        if (userName == "") {
+            $('#errorlblUsername').text("Enter User Name!");
+            //return false;
+        }
+        if (userPassword == "") {
+            $('#errorlbluserPwd').text("Enter User Password!");
+            //return false;
+        }
+
+        var jsoData = new function () {
+            this.UserName = userName,
+                this.Password = userPassword,
+                this.IsRememberMe = $('#chkRememberMe')[0].checked
+        }
+        debugger
+        var dataToSend = JSON.stringify(jsoData);
+
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("CheckCredentials", "LoginAndRegistration")",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            data: dataToSend,
+            success: function (data) {
+                debugger
+                if (data == "Login Successfully") {
+                    window.location = "/Dashboard/Dashboard";
+                }
+                else {
+                    alert(data);
+                }
+            },
+            error: function () {
+                alert("some error has occurred at server");
+                debugger
+            }
+        })
+
+    }
+</script>
+

@@ -1,0 +1,175 @@
+﻿
+@{
+    Layout = null;
+}
+
+<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title> Registration </title>
+    <style>
+        Body {
+            font-family: Calibri, Helvetica, sans-serif;
+            /*background-color: pink;*/
+        }
+
+        label {
+            width: 100%;
+        }
+
+        button {
+            /* background-color: #4CAF50;*/
+            width: 100%;
+            /*color: orange;
+            padding: 15px;*/
+            margin: 10px 0px;
+            /* border: none;
+            cursor: pointer;*/
+        }
+
+        /*form {
+            border: 3px solid #f1f1f1;
+        }*/
+
+        input[type=text], input[type=password] {
+            width: 100%;
+            margin: 5px 0;
+            padding: 8px 8px;
+            display: inline-block;
+            /*border: 1px solid green;
+            box-sizing: border-box;*/
+        }
+
+        button:hover {
+            opacity: 0.7;
+        }
+
+        .container {
+            padding: 25px;
+            /*background-color: lightblue;*/
+        }
+
+        fieldset {
+            width: 50%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Create a new account </h1>
+        <p>Use the form below to create a new account.</p>
+        <p>Passwords are required to bew a minimum of 6 characters in length</p>
+        @*<form>*@
+        <fieldset>
+            <legend>Account Information</legend>
+            <label>Username : </label>
+            <input type="text" placeholder="Enter Username" id="username">
+            <label style="color:red;" id="errorlblUsername"></label>
+
+            <label>Email : </label>
+            <input type="text" placeholder="Enter Email" id="userEmail">
+            <label style="color:red;" id="errorlblUseremail"></label>
+
+            <label>Password : </label>
+            <input type="password" placeholder="Enter Password" id="userpwd" autocomplete="off">
+
+            <label>Confirm Password : </label>
+            <input type="password" placeholder="Enter Password" id="usercnfpwd" autocomplete="off">
+            <label style="color:red;" id="errorlblUserPwd"></label>
+
+            <button class="btn btn-primary" onclick="UserRegister()">Register</button>
+        </fieldset>
+        @*</form>*@
+    </div>
+</body>
+</html>
+
+
+<script>
+
+    function UserRegister()
+    {
+        debugger
+        $('#errorlblUsername').text("");
+        $('#errorlblUseremail').text("");
+        $('#errorlblUserPwd').text("");
+        let userName = $('#username').val();
+        let userEmail = $('#userEmail').val();
+        let userPassword = $('#userpwd').val();
+        let userConfirmPassword = $('#usercnfpwd').val();
+        let flagValidation = true;
+
+        if (userName == "") {
+            $('#errorlblUsername').text("Enter User Name!");
+            flagValidation = false;
+        }
+        else {
+            $('#errorlblUsername').text();
+        }
+
+        if (userEmail == "") {
+            $('#errorlblUseremail').text("Enter User Email!");
+            flagValidation = false;
+        }
+        else {
+            $('#errorlblUseremail').text();
+        }
+
+        if (userPassword != "" && userConfirmPassword != "" && userPassword !== userConfirmPassword) {
+            $('#errorlblUserPwd').text("Password and Confirm Password dose not mathch!");
+            flagValidation = false;
+            //return false;
+        }
+        else if (userPassword != "" && userConfirmPassword == "") {
+            $('#errorlblUserPwd').text("Enter Confirm Password!");
+            flagValidation = false;
+        }
+        else if (userConfirmPassword != "" && userPassword == "") {
+            $('#errorlblUserPwd').text("Enter Password!");
+            flagValidation = false;
+        }
+        else if (userPassword == "" && userConfirmPassword == "") {
+            $('#errorlblUserPwd').text("Enter Password and Confirm Password!");
+            flagValidation = false;
+        } else if (userPassword.length < 6) {
+            $('#errorlblUserPwd').text("Passwords are required to be a minimum of 6 characters in length.");
+            flagValidation = false;
+        }
+        else {
+            $('#errorlblUserPwd').text();
+        }
+
+        //Check validation
+        if (flagValidation==true) {
+            var jsoData = new function () {
+                this.UserName = userName,
+                this.Email = userEmail,
+                this.Password = userPassword
+            }
+
+            debugger
+            var dataToSend = JSON.stringify(jsoData);
+
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("AddRegistration", "LoginAndRegistration")",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                data: dataToSend,
+                success: function (data) {
+                    debugger
+                    window.location = "/LoginAndRegistration/Login";
+                },
+                error: function () {
+                    alert("some error has occurred at server");
+                    debugger
+                }
+            })
+
+        }
+    }
+</script>
