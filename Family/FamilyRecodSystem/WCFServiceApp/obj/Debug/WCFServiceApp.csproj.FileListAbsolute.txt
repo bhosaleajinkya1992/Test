@@ -1,0 +1,12 @@
+C:\Users\ADMIN\source\repos\Family\FamilyRecodSystem\WCFServiceApp\bin\WCFServiceApp.dll.config
+C:\Users\ADMIN\source\repos\Family\FamilyRecodSystem\WCFServiceApp\bin\WCFServiceApp.dll
+C:\Users\ADMIN\source\repos\Family\FamilyRecodSystem\WCFServiceApp\bin\WCFServiceApp.pdb
+C:\Users\ADMIN\source\repos\Family\FamilyRecodSystem\WCFServiceApp\bin\EntityFramework.dll
+C:\Users\ADMIN\source\repos\Family\FamilyRecodSystem\WCFServiceApp\bin\EntityFramework.SqlServer.dll
+C:\Users\ADMIN\source\repos\Family\FamilyRecodSystem\WCFServiceApp\bin\EntityFramework.xml
+C:\Users\ADMIN\source\repos\Family\FamilyRecodSystem\WCFServiceApp\bin\EntityFramework.SqlServer.xml
+C:\Users\ADMIN\source\repos\Family\FamilyRecodSystem\WCFServiceApp\obj\Debug\WCFServiceApp.csproj.AssemblyReference.cache
+C:\Users\ADMIN\source\repos\Family\FamilyRecodSystem\WCFServiceApp\obj\Debug\WCFServiceApp.csproj.CoreCompileInputs.cache
+C:\Users\ADMIN\source\repos\Family\FamilyRecodSystem\WCFServiceApp\obj\Debug\WCFServiceApp.csproj.CopyComplete
+C:\Users\ADMIN\source\repos\Family\FamilyRecodSystem\WCFServiceApp\obj\Debug\WCFServiceApp.dll
+C:\Users\ADMIN\source\repos\Family\FamilyRecodSystem\WCFServiceApp\obj\Debug\WCFServiceApp.pdb
