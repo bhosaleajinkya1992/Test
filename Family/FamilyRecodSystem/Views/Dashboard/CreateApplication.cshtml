@@ -1,0 +1,42 @@
+﻿
+@{
+    ViewBag.Title = "CreateApp";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <style>
+        .row {
+            padding: 5px;
+        }
+
+        #Create {
+            border: black;
+            border-style: solid;
+            border-width: thin;
+            height: 460px;
+            padding: 25px;
+            /*background-color: lightblue;*/
+        }
+    </style>
+</head>
+<body>
+    <div id="Create" class="container">
+        <div class="panel">
+            <div class="panel-body">
+                <div class="row" style="text-align: center; display: block;"><div class="col-sm-12 col-md-12 col-lg-12"><button class="btn btn-success" onclick="CreateApp();">Create Application</button></div></div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+<script>
+    function CreateApp() {
+    document.location = '@Url.Action("Index", "HouseholdInfo")';
+    }
+</script>
+
+
