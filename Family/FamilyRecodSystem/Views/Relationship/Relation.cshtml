@@ -1,0 +1,195 @@
+﻿
+@{
+    ViewBag.Title = "Relation";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <style>
+        .row {
+            padding: 5px;
+        }
+
+        #Admin {
+            border: black;
+            border-style: solid;
+            border-width: thin;
+            height: auto;
+            padding: 25px;
+            /*background-color: lightblue;*/
+        }
+    </style>
+</head>
+<body>
+    <div id="Admin" class="container">
+        <div class="panel">
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-sm-6 col-md-6 col-lg-6"><h5>Household Relationships</h5></div>
+                    <div class="col-sm-6 col-md-6 col-lg-6"><label style="color:red;float:right">* Required Fields</label></div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 col-md-12 col-lg-12"><label>Please tell us how the members of your household are related to each other.</label></div>
+                </div>
+                <div class="row" id="divAvtar">
+
+                </div>
+                <div class="row">
+                    <div id="heading" class="col-sm-12 col-md-12 col-lg-12" style="font-weight:bold"></div>
+                </div>
+                <div id="divRelationRow">
+
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-8 col-md-8 col-lg-8">
+                        <button type="button" id="btnSaveExit" onclick="SaveMemeberRelation();" class="btn btn-success">Save and Exit</button>
+                    </div>
+                    <div class="col-sm-2 col-md-2 col-lg-2">
+                        @*<button type="button" id="btnBack" class="btn btn-success float-end">Back</button>*@
+                    </div>
+                    <div class="col-sm-2 col-md-2 col-lg-2">
+                        <button type="button" id="btnBack" class="btn btn-success" onclick="GotoHousehodInfo();">Back</button>
+                        <button type="button" id="btnNext" class="btn btn-success float-end" onclick="SubmitData();">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+<script>
+    $(document).ready(function () {
+        var heading = '@Session["UserName"].ToString()' + "'s Relationships";
+        $("#heading").html(heading);
+        LoadMembers();
+    });
+
+    function LoadDropDownOptions(ddl, relationId) {
+        debugger
+        $.ajax({
+            type: "GET",
+            url: "@Url.Action("LoadRelation", "Relationship")",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                debugger
+                var ddlOptions = '';
+                ddlOptions += '<option value="0">-- Select --</option>';
+                $.each(data, function (i, item) {
+                    if (item.RelationId == relationId) {
+                        ddlOptions += '<option value="' + item.RelationId + '" selected>' + item.RelationName + '</option>';
+                    }
+                    else {
+                        ddlOptions += '<option value="' + item.RelationId + '">' + item.RelationName + '</option>';
+                    }
+
+                });
+                $('#' + ddl).append(ddlOptions);
+            }
+        });
+    }
+
+    function LoadMembers() {
+         var userId = '@Session["UserId"].ToString()';
+        debugger
+         $.ajax({
+            type: "GET",
+            url: "@Url.Action("LoadMembers", "Relationship")",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            data: { userId: userId } ,
+             success: function (data)
+             {
+                 debugger
+                if (data.length > 0) {
+                    //var divHTML = '';
+                    //var divRow = '';
+                    $.each(data, function (i, item) {
+                        var divHTML = '';
+                        var divRelationRow = '';
+                        divHTML += '<div class="col-sm-2 col-md-2 col-lg-2" style="border: solid;border-width: 1px;margin-right: 5px;"><img src="/Images/Avtar.jpg" alt="Avatar" style="width:100%"> <label style="padding-left: 40px;font-weight: bold;"> ' + item.MemberName + '</label></div>';
+
+                        divRelationRow += '<div class="row"><div class="col-sm-3 col-md-3 col-lg-3"><label style="color:red;font-weight:bold">*</label>' + " Relationship to " + item.MemberName + ' </div><div class="col-sm-3 col-md-3 col-lg-3"><select id="' + item.MemberId + '" onchange="relationChange(this);"></select></div>  </div>';
+
+                        $('#divAvtar').append(divHTML);
+                        $('#divRelationRow').append(divRelationRow);
+
+                        LoadDropDownOptions(item.MemberId, item.RelationId);
+                    });
+                    //$('#divAvtar').append(divHTML);
+                    //$('#divRow').append(divRow);
+
+                    //divHTML = '';
+                    //$.each(data, function (i, item) {
+                    //    divHTML += '<div class="row"><div class="col-sm-4 col-md-4 col-lg-4">' + "Relationship to " + item.MemberName + ' </div><div class="col-sm-4 col-md-4 col-lg-4"><select id="ddl"></select></div>  </div>';
+                    //});
+
+                }
+             }
+         });
+
+    }
+
+    function GotoHousehodInfo() {
+        document.location = '@Url.Action("Index", "HouseholdInfo")';
+    }
+    function relationChange(e) {
+        debugger
+        //alert(e.value);
+        //alert(e.id);
+        $.ajax({
+            type: "GET",
+            url: "@Url.Action("UpdateRelation", "Relationship")",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            data: { memberId: e.id, relationId: e.value },
+            success: function (data) { }
+        });
+    }
+    function SubmitData() {
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("UpdateOrSaveRelationOfMember", "Relationship")",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                debugger
+                if (data == "Success") {
+                    document.location = '@Url.Action("Confirmation", "Relationship")';
+                }
+                else {
+                    alert("Someting went wrong...");
+                }
+            }
+        });
+    }
+
+    function SaveMemeberRelation() {
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("UpdateOrSaveRelationOfMember", "Relationship")",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data)
+            {
+                debugger
+                if (data == "Success") {
+
+                }
+                else {
+                    alert("Someting went wrong...");
+                }
+            }
+        });
+    }
+
+</script>
+
