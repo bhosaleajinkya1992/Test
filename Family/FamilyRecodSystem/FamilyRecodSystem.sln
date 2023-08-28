@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34009.444
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FamilyRecodSystem", "FamilyRecodSystem.csproj", "{27705F2F-3632-4A01-8CE7-6CDAB2496FE8}"
+	ProjectSection(ProjectDependencies) = postProject
+		{899F8C21-6828-4ACE-AE1F-209687717832} = {899F8C21-6828-4ACE-AE1F-209687717832}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WCFServiceApp", "WCFServiceApp\WCFServiceApp.csproj", "{899F8C21-6828-4ACE-AE1F-209687717832}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{27705F2F-3632-4A01-8CE7-6CDAB2496FE8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{27705F2F-3632-4A01-8CE7-6CDAB2496FE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{27705F2F-3632-4A01-8CE7-6CDAB2496FE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{27705F2F-3632-4A01-8CE7-6CDAB2496FE8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{899F8C21-6828-4ACE-AE1F-209687717832}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{899F8C21-6828-4ACE-AE1F-209687717832}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{899F8C21-6828-4ACE-AE1F-209687717832}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{899F8C21-6828-4ACE-AE1F-209687717832}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7E88836F-E9F8-46F5-BC22-D4140D5F1702}
+	EndGlobalSection
+EndGlobal
