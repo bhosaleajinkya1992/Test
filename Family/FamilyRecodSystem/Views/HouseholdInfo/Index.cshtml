@@ -1,0 +1,288 @@
+﻿@*@model FamilyRecodSystem.Models.MemberDetails*@
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <style>
+        .row {
+            padding: 5px;
+        }
+        /* .rowButton{
+            padding-top:25px;
+        }*/
+        #divHouse {
+            border: black;
+            border-style: solid;
+            border-width: thin;
+            height: auto;
+            padding: 25px;
+            /*background-color: lightblue;*/
+        }
+
+        #btnAddMember {
+            padding-left: 29px;
+            padding-right: 29px;
+            margin-top: 23px;
+        }
+
+        #btnNext, #btnBack {
+            padding-left: 15px;
+            padding-right: 15px;
+        }
+
+        .required {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <div id="divHouse" class="container">
+        <div class="panel">
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-sm-6 col-md-6 col-lg-6"><h5>Create Application</h5></div>
+                    <div class="col-sm-6 col-md-6 col-lg-6"><label style="color:red;float:right">* Required Fields</label></div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-3 col-md-3 col-lg-3">
+                        <input type="text" id="txtMemberId" style="display:none;">
+                        <label><span class="required">*</span>First Name</label>
+                        <input type="text" class="form-control" id="txtName" placeholder="First Name">
+                    </div>
+                    <div class="col-sm-3 col-md-3 col-lg-3">
+                        <label>Middle Name</label>
+                        <input type="text" class="form-control" id="txtMiddleName" placeholder="Middle Name">
+                    </div>
+                    <div class="col-sm-3 col-md-3 col-lg-3">
+                        <label><span class="required">*</span>Last Name</label>
+                        <input type="text" class="form-control" id="txtLastName" placeholder="Last Name">
+                    </div>
+                    <div class="col-sm-3 col-md-3 col-lg-3">
+                        <label>Suffix</label>
+                        <select class="form-control" id="ddlSuffix">
+                            <option value="0" selected>-- Select --</option>
+                            <option value="1">Mr.</option>
+                            <option value="2">Mrs.</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-3 col-md-3 col-lg-3">
+                        <label><span class="required">*</span>Date of Birth(mm/dd/yyyy)</label>
+                        <input type="date" class="form-control" id="txtDate" >
+                    </div>
+                    <div class="col-sm-4 col-md-4 col-lg-4">
+                        <label><span class="required">*</span>Gender</label><br>
+                        <input type="radio" class="form-check-input" id="male" value="1" name="gender">
+                        <label style="padding-right: 40px;">Male</label>
+                        <input type="radio" class="form-check-input" id="female" value="2" name="gender">
+                        <label>Female</label>
+                    </div>
+                    <div class="col-sm-5 col-md-5 col-lg-5">
+                        <button type="button" id="btnAddMember" class="btn btn-success float-end">Add Member</button>
+                    </div>
+                </div>
+
+                <div class="row">
+                    @*<div class="col-sm-12 col-md-12 col-lg-12">
+                            <button type="button" id="btnAddMember" class="btn btn-success float-end">Add Member</button>
+                        </div>*@
+
+                    <div class="col-sm-12 col-md-12 col-lg-12">
+                        <table class="table table-striped" id="tblMember">
+                            <thead>
+                                <tr>
+                                    <th scope="col" style="display:none;"></th>
+                                    <th scope="col">First Name</th>
+                                    <th scope="col">Middle Name</th>
+                                    <th scope="col">Last Name</th>
+                                    <th scope="col">Suffix</th>
+                                    <th scope="col">Date of Birth</th>
+                                    <th scope="col">Gender</th>
+                                    <th scope="col">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-8 col-md-8 col-lg-8">
+                        <button type="button" id="btnSaveExit" onclick="SaveMemeber();" class="btn btn-success">Save and Exit</button>
+                    </div>
+                    <div class="col-sm-2 col-md-2 col-lg-2">
+                        @*<button type="button" id="btnBack" class="btn btn-success float-end">Back</button>*@
+                    </div>
+                    <div class="col-sm-2 col-md-2 col-lg-2">
+                        <button type="button" id="btnBack" class="btn btn-success" onclick="GotoCreateApplication();">Back</button>
+                        <button type="button" id="btnNext" class="btn btn-success float-end" onclick="GotoRelation();">Next</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>
+
+<script>
+    $(document).ready(function () {
+        LoadExistingMembers();
+    });
+    var isRequired = true;
+    $('#btnAddMember').click(function () {
+        debugger
+        ValidateMember();
+        if (isRequired) {
+            var memberId = $('#txtMemberId').val();
+            var firstName = $('#txtName').val();
+            var middleName = $('#txtMiddleName').val();
+            var lastName = $('#txtLastName').val();
+            var suffix = $('#ddlSuffix').val() == 1 ? "Mr." : "Mrs.";
+            var suffixId = $('#ddlSuffix').val();
+            var dob = $('#txtDate').val();
+
+            var gender = $("input:radio[name=gender]:checked").val() == 1 ? "Male" : "Female";
+            var genderId = $("input:radio[name=gender]:checked").val();
+
+            var newrow = '<tr><td style="display: none; ">' + memberId + '</td><td>' + firstName + '</td><td>' + middleName + '</td><td>' + lastName + '</td><td>' + suffix + '</td><td>' + dob + '</td><td>' + gender + '</td><td><button type=" + button +" class=" + btn btn-danger +">X</button> </td></tr>';
+            $('#tblMember tbody').append(newrow);
+
+            //var members = new Array(); <button type='button' class='btn btn-danger'>Delete</button>
+
+            //var member = {};
+            //$("#tblMember tbody tr").each(function () {
+            //    var row = $(this);
+            //   /* var member = {};*/
+            //    debugger
+            //    member.MemberId = row.find("td").eq(0).html();
+            //    member.MemberName = row.find("td").eq(1).html();
+            //    member.MemberMiddleName = row.find("td").eq(2).html();
+            //    member.MemberLastName = row.find("td").eq(3).html();
+            //    member.Suffix = row.find("td").eq(4).html() == "Mr." ? 1 : row.find("td").eq(4).html() =="Mrs." ? 2 : 0 ;
+            //    member.DateOfBirth = row.find("td").eq(5).html();
+            //    member.Gender = row.find("td").eq(6).html() == "Male" ? 1 : row.find("td").eq(6).html() == "Female" ? 2 : 0;
+            //    members.push(member);
+            //});
+
+            var jsoData = new function () {
+               /* this.MemberId = member["MemberId"],*/
+                    //this.MemberName = member["MemberName"],
+                    //this.MemberMiddleName = member["MemberMiddleName"],
+                    //this.MemberLastName = member["MemberLastName"],
+                    //this.Suffix = member["Suffix"],
+                    //this.DateOfBirth = member["DateOfBirth"],
+                    //this.Gender = member["Gender"]
+                    this.MemberId = memberId,
+                this.MemberName = firstName,
+                    this.MemberMiddleName = middleName,
+                    this.MemberLastName = lastName,
+                    this.Suffix = suffixId,
+                    this.DateOfBirth = dob,
+                    this.Gender = genderId
+            }
+            debugger
+            var dataToSend = JSON.stringify(jsoData);
+            //Send the JSON array to Controller using AJAX.
+            //debugger
+            //var dataToSend = JSON.stringify(member);
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("StoreDetailsIntoSession", "HouseholdInfo")",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                data: dataToSend ,
+                success: function (data) {
+                    /*alert(data);*/
+                    if (data == "Success") {
+                        /*$('#txtMemberId').val("");*/
+                        $('#txtName').val("");
+                        $('#txtMiddleName').val("");
+                        $('#txtLastName').val("");
+                        $('#ddlSuffix').val("");
+                        $('#txtDate').val("");
+                    }
+                }
+            });
+        }
+    });
+
+    function ValidateMember() {
+        var rdButton = $("input:radio[name=gender]:checked").val();
+        if ($('#txtName').val() == "") {
+            alert("Please enter first name.");
+            isRequired = false;
+        } else if ($('#txtLastName').val() == "") {
+            alert("Please enter last name.");
+            isRequired = false;
+        } else if ($('#txtDate').val() == "") {
+            alert("Please enter date of birth.");
+            isRequired = false;
+        } else if (rdButton == undefined) {
+            alert("Please select gender.");
+            isRequired = false;
+        } else {
+            isRequired = true;
+        }
+    }
+
+    function LoadExistingMembers() {
+        var userId = '@Session["UserId"].ToString()';
+        debugger
+        $.ajax({
+            type: "GET",
+            url: "@Url.Action("LoadExistingMembers", "HouseholdInfo")",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            data: { userId: userId } ,
+            success: function (data) {
+                debugger
+                if (data.length > 0) {
+                    var trHTML = '';
+                    $.each(data, function (i, item) {
+                        trHTML += '<tr><td style="display: none; ">' + item.MemberId + '</td>';
+                        trHTML += '<td >' + item.MemberName + '</td>';
+                        trHTML += '<td >' + item.MemberMiddleName + '</td>';
+                        trHTML += '<td >' + item.MemberLastName + '</td>';
+
+                        trHTML += item.Suffix == 0 ? '' : item.Suffix == 1 ? '<td>Mr.</td>' : '<td>Mrs.</td>'
+
+                        trHTML += '<td >' + item.DateOfBirth + '</td>';
+                        trHTML += item.Gender == 1 ? '<td>Male</td>' : '<td>Female</td>'
+                        trHTML += '<td><button type=" + button +" class=" + btn btn-danger +">X</button> </td></tr>';
+                    });
+                    $('#tblMember tbody').append(trHTML);
+                }
+                 /*alert(data);*/
+                 }
+        });
+    }
+
+    function GotoCreateApplication() {
+        document.location = '@Url.Action("CreateApplication", "Dashboard")';
+    }
+    function GotoRelation() {
+     document.location = '@Url.Action("Relation", "Relationship")';
+    }
+    function SaveMemeber() {
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("SaveMembers", "HouseholdInfo")",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) { }
+        });
+    }
+</script>
+
+
